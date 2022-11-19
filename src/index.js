@@ -19,53 +19,48 @@ console.log(newsApiService);
 refs.searchForm.addEventListener('submit', onSearche);
 refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
-
-
 function onSearche(event) {
   event.preventDefault();
 
   newsApiService.searchQuery = event.currentTarget.elements.searchQuery.value;
   newsApiService.resetPage();
-  newsApiService.fetchArticles().then(appendHitsMarkup);  
-};
+  newsApiService.fetchArticles().then(appendHitsMarkup);
+}
 
 function onLoadMore() {
-    newsApiService.fetchArticles().then(appendHitsMarkup);
-};
+  newsApiService.fetchArticles().then(appendHitsMarkup);
+}
 
 function appendHitsMarkup(hits) {
-    console.log('hits.likes', hits[19].likes);
-
-    currentHits += hits.length;
-  const mark = hits.reduce((acc, element) => {
-    acc += `<div class="photo-card" width="400px">
-        <a href="${element.largeImageURL}">
-           <img class="photo-img" src="${element.webformatURL}" alt="${element.tags}" loading="lazy" />
-           </a>
-           <div class="info">
-             <p class="info-item">
-               <b>Likes</b>
-               ${element.likes}
-             </p>
-             <p class="info-item">
-               <b>Views</b>
-               ${element.views}
-             </p>
-             <p class="info-item">
-               <b>Comments</b>
-               ${element.comments}
-             </p>
-             <p class="info-item">
-               <b>Downloads</b>
-               ${element.downloads}
-             </p>
-           </div>
-        </div>`;
-
-    return acc;
-  }, '');
-  return mark;
+  console.log('hits.likes', hits[19].likes);
+  refs.articlesContainer.insertAdjacentHTML('beforeend', createCard(hits));
 }
+
+function createCard (hits) {
+  return hits.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => {
+    return ` 
+    <div class="photo-card">
+    <a href="${largeImageURL}">
+    <img src="${webformatURL}" alt="${tags}" loading="lazy" /></a>
+    <div class="info">
+      <p class="info-item">
+        <b>Likes</b>${likes}
+      </p>
+      <p class="info-item">
+        <b>Views</b>${views}
+      </p>
+      <p class="info-item">
+        <b>Comments</b>${comments}
+      </p>
+      <p class="info-item">
+        <b>Downloads</b>${downloads}
+      </p>
+    </div>
+  </div>
+  `
+  }).join('');
+ 
+};
 
 // function onFetch() {
 //     fetch('https://pixabay.com/api/?key=31423589-05a77bf58d80d41712d5d29e1&q=women&image_type=photo&per_page=40&page=2')
