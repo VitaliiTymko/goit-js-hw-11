@@ -11,6 +11,7 @@ const refs = {
   loadMoreBtn: document.querySelector('.load-more'),
 };
 
+let currentHits = 0;
 const newsApiService = new NewsApiService();
 
 console.log(newsApiService);
@@ -34,6 +35,36 @@ function onLoadMore() {
 
 function appendHitsMarkup(hits) {
     console.log('hits.likes', hits[19].likes);
+
+    currentHits += hits.length;
+  const mark = hits.reduce((acc, element) => {
+    acc += `<div class="photo-card" width="400px">
+        <a href="${element.largeImageURL}">
+           <img class="photo-img" src="${element.webformatURL}" alt="${element.tags}" loading="lazy" />
+           </a>
+           <div class="info">
+             <p class="info-item">
+               <b>Likes</b>
+               ${element.likes}
+             </p>
+             <p class="info-item">
+               <b>Views</b>
+               ${element.views}
+             </p>
+             <p class="info-item">
+               <b>Comments</b>
+               ${element.comments}
+             </p>
+             <p class="info-item">
+               <b>Downloads</b>
+               ${element.downloads}
+             </p>
+           </div>
+        </div>`;
+
+    return acc;
+  }, '');
+  return mark;
 }
 
 // function onFetch() {
