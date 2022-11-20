@@ -3,20 +3,30 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import './css/styles.css';
 import NewsApiService from './news-service';
-// const DEBOUNCE_DELAY = 300;
+import LoadMoreBtn from './css/load-more-btn';
+
 
 const refs = {
   searchForm: document.querySelector('.search-form'),
   articlesContainer: document.querySelector('.gallery'),
-  loadMoreBtn: document.querySelector('.load-more'),
+  // loadMoreBtn: document.querySelector('[data-action="load-more"]'),
 };
 
 const newsApiService = new NewsApiService();
+const loadMoreBtn = new LoadMoreBtn({
+  selector: '[data-action="load-more"]',
+  hidden: true,
+});
 
-console.log('newsApiService', newsApiService);
+console.log('loadMoreBtn', loadMoreBtn);
+
+loadMoreBtn.hide();
+
 
 refs.searchForm.addEventListener('submit', onSearche);
-refs.loadMoreBtn.addEventListener('click', onLoadMore);
+loadMoreBtn.refs.button.addEventListener('click', onLoadMore);
+
+
 
 function onSearche(event) {
   event.preventDefault();
