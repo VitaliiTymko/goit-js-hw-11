@@ -9,7 +9,7 @@ export default class NewsApiService {
     return fetch(
       `https://pixabay.com/api/?key=31423589-05a77bf58d80d41712d5d29e1&q=${this.query}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${this.page}`
     )
-      .then(r => r.json())
+      .then(responce => responce.json())
       .then(data => {
         console.log('DATA: ',data);
         this.page +=1;

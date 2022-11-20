@@ -11,10 +11,9 @@ const refs = {
   loadMoreBtn: document.querySelector('.load-more'),
 };
 
-let currentHits = 0;
 const newsApiService = new NewsApiService();
 
-console.log(newsApiService);
+console.log('newsApiService', newsApiService);
 
 refs.searchForm.addEventListener('submit', onSearche);
 refs.loadMoreBtn.addEventListener('click', onLoadMore);
@@ -22,9 +21,23 @@ refs.loadMoreBtn.addEventListener('click', onLoadMore);
 function onSearche(event) {
   event.preventDefault();
 
+  clearArticlesContainer();
   newsApiService.searchQuery = event.currentTarget.elements.searchQuery.value;
+  if (newsApiService.searchQuery === '') {
+    Notiflix.Notify.failure(`Enter what you want to find`);
+    return;
+  }
   newsApiService.resetPage();
-  newsApiService.fetchArticles().then(appendHitsMarkup);
+  newsApiService.fetchArticles().then(hits => {
+    console.log('hits.length ', hits.length);
+    if (hits.length === 0) {
+      Notiflix.Notify.failure(
+        `Sorry, there are no images matching your search query. Please try again.`
+      );
+      return;
+    }
+    appendHitsMarkup(hits);
+  });
 }
 
 function onLoadMore() {
@@ -32,16 +45,26 @@ function onLoadMore() {
 }
 
 function appendHitsMarkup(hits) {
-  console.log('hits.likes', hits[19].likes);
+  // console.log('hits.likes', hits[19].likes);
   refs.articlesContainer.insertAdjacentHTML('beforeend', createCard(hits));
 }
 
-function createCard (hits) {
-  return hits.map(({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) => {
-    return ` 
+function createCard(hits) {
+  return hits
+    .map(
+      ({
+        webformatURL,
+        largeImageURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) => {
+        return ` 
     <div class="photo-card">
-    <a href="${largeImageURL}">
-    <img src="${webformatURL}" alt="${tags}" loading="lazy" /></a>
+    <a class="gallery__item" href="${largeImageURL}">
+    <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" /></a>
     <div class="info">
       <p class="info-item">
         <b>Likes</b>${likes}
@@ -57,9 +80,29 @@ function createCard (hits) {
       </p>
     </div>
   </div>
-  `
-  }).join('');
- 
+  `;
+      }
+    )
+    .join('');
+}
+
+function clearArticlesContainer() {
+  refs.articlesContainer.innerHTML = '';
+}
+
+const lightbox = {
+  init() {
+    this.lightbox = new SimpleLightbox('.photo-card a', {
+      captionsData: 'alt',
+      captionDelay: 250,
+      close: false,
+      showCounter: false,
+    });
+  },
+
+  refresh() {
+    this.lightbox.refresh();
+  },
 };
 
 // function onFetch() {
