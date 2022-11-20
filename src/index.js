@@ -5,7 +5,6 @@ import './css/styles.css';
 import NewsApiService from './news-service';
 import LoadMoreBtn from './css/load-more-btn';
 
-
 const refs = {
   searchForm: document.querySelector('.search-form'),
   articlesContainer: document.querySelector('.gallery'),
@@ -20,32 +19,31 @@ const loadMoreBtn = new LoadMoreBtn({
 
 console.log('loadMoreBtn', loadMoreBtn);
 
-loadMoreBtn.hide();
-
+// loadMoreBtn.enable();
 
 refs.searchForm.addEventListener('submit', onSearche);
 loadMoreBtn.refs.button.addEventListener('click', onLoadMore);
 
-
-
 function onSearche(event) {
   event.preventDefault();
-
   clearArticlesContainer();
   newsApiService.searchQuery = event.currentTarget.elements.searchQuery.value;
   if (newsApiService.searchQuery === '') {
     Notiflix.Notify.failure(`Enter what you want to find`);
     return;
   }
+  
   newsApiService.resetPage();
   newsApiService.fetchArticles().then(hits => {
-    console.log('hits.length ', hits.length);
     if (hits.length === 0) {
       Notiflix.Notify.failure(
         `Sorry, there are no images matching your search query. Please try again.`
       );
+      loadMoreBtn.hide();
+
       return;
     }
+    loadMoreBtn.show();
     appendHitsMarkup(hits);
   });
 }

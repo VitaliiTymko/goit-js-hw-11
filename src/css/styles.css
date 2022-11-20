@@ -182,6 +182,20 @@ ul {
   flex-direction: column;
 }
 
+.button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.button.is-hidden {
+  display: none;
+}
+
+.button  .spinner.is-hidden {
+  display: none;
+}
+
 .btn-primary {
   text-decoration: none;
   background-color: rgb(34, 34, 119);
