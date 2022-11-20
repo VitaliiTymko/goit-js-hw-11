@@ -106,25 +106,4 @@ function clearArticlesContainer() {
 
 
 
-// const lightbox = {
-//   init() {
-//     this.lightbox = new SimpleLightbox('.photo-card a', {
-//       captionsData: 'alt',
-//       captionDelay: 250,
-//       close: false,
-//       showCounter: false,
-//     });
-//   },
 
-//   refresh() {
-//     this.lightbox.refresh();
-//   },
-// };
-
-// function onFetch() {
-//     fetch('https://pixabay.com/api/?key=31423589-05a77bf58d80d41712d5d29e1&q=women&image_type=photo&per_page=40&page=2')
-//     .then(r=> r.json())
-//     .then(console.log())
-// }
-
-// onFetch();
