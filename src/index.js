@@ -1,3 +1,4 @@
+import axios from "axios";
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -17,6 +18,11 @@ const loadMoreBtn = new LoadMoreBtn({
   hidden: true,
 });
 
+const lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+});
+
 console.log('loadMoreBtn', loadMoreBtn);
 
 // loadMoreBtn.enable();
@@ -32,7 +38,7 @@ function onSearche(event) {
     Notiflix.Notify.failure(`Enter what you want to find`);
     return;
   }
-  
+
   newsApiService.resetPage();
   newsApiService.fetchArticles().then(hits => {
     if (hits.length === 0) {
@@ -40,7 +46,7 @@ function onSearche(event) {
         `Sorry, there are no images matching your search query. Please try again.`
       );
       loadMoreBtn.hide();
-
+      lightbox.refresh();
       return;
     }
     loadMoreBtn.show();
@@ -71,7 +77,7 @@ function createCard(hits) {
       }) => {
         return ` 
     <div class="photo-card">
-    <a class="gallery__item" href="${largeImageURL}">
+    <a class="gallery__item" href="${largeImageURL}" >
     <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy" /></a>
     <div class="info">
       <p class="info-item">
@@ -98,10 +104,7 @@ function clearArticlesContainer() {
   refs.articlesContainer.innerHTML = '';
 }
 
-const lightbox = new SimpleLightbox('.gallery__item a', {
-  captionsData: 'alt',
-  captionDelay: 250,
-});
+
 
 // const lightbox = {
 //   init() {
