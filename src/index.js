@@ -18,17 +18,14 @@ const loadMoreBtn = new LoadMoreBtn({
   hidden: true,
 });
 
-const lightbox = new SimpleLightbox('.gallery a', {
-  captionsData: 'alt',
-  captionDelay: 250,
-});
+const lightbox = new SimpleLightbox('.gallery a', { captionsData: "alt", captionDelay: 250 });
 
 console.log('loadMoreBtn', loadMoreBtn);
 
 // loadMoreBtn.enable();
 
 refs.searchForm.addEventListener('submit', onSearche);
-loadMoreBtn.refs.button.addEventListener('click', onLoadMore);
+loadMoreBtn.refs.button.addEventListener('click', onLoadMore); 
 
 function onSearche(event) {
   event.preventDefault();
@@ -46,11 +43,12 @@ function onSearche(event) {
         `Sorry, there are no images matching your search query. Please try again.`
       );
       loadMoreBtn.hide();
-      lightbox.refresh();
+      
       return;
     }
     loadMoreBtn.show();
     appendHitsMarkup(hits);
+    lightbox.refresh();
   });
 }
 
